@@ -2,34 +2,53 @@ import socket
 import io
 import sys
 
-buffersize=1000	
+BUFFERSIZE=8096	
+RESPONESTRING='\n'
+COMMANDEND='\n'
+COMMANDSPLIT=' '
+def DebugOutput(msg):
+	if __debug__:
+		print(msg)
+
 def GetFileFromSocket(in_socket,recv_filename):
 	fdfile=io.open(recv_filename,'ab')
-	while(1):
-		filebuffer=in_socket.recv(buffersize)
+	while(True):
+		filebuffer=in_socket.recv(BUFFERSIZE)
 		if(len(filebuffer)==0):
-			break;
-		print("get's  ",filebuffer)
+			break
+		DebugOutput("get's  "+filebuffer)
 		fdfile.write(filebuffer)
-	fdfile.flush()
 	fdfile.close()
 
 def SendFileToSocket(in_socket,send_filename):
 	fdfile=io.open(send_filename,'rb')
-	while(1):
-		filebuffer=fdfile.read(buffersize)
+	while(True):
+		filebuffer=fdfile.read(BUFFERSIZE)
 		if(len(filebuffer)==0):
-			break;
-		print("send's ",filebuffer)
+			break
+		DebugOutput("send's "+filebuffer)
 		in_socket.sendall(filebuffer)
 	fdfile.close()
-def GetCommandStr(in_socket,in_endchar):
+
+def SendCommand(in_socket,command):
+	in_socket.sendall(command+COMMANDEND)
+	
+def WaitCommand(in_socket):
 	cmdstr=''
-	while(1):
-		cmdstr+=in_socket.recv(100)
-		if(cmdstr.endswith(in_endchar)):
-			cmdstr=cmdstr.split(in_endchar)[0]
-			break;
+	while(True):
+		cmdstr+=in_socket.recv(BUFFERSIZE)
+		if cmdstr.endswith(COMMANDEND):
+			cmdstr=cmdstr.split(COMMANDEND)[0]
+			break
 	return cmdstr			
+
+def SendResponeCommand(in_socket):
+	in_socket.sendall(RESPONESTRING)
 	
-	
+def WaitResponeCommand(in_socket):
+	respcmdstr=''
+	while(True):
+		respcmdstr+=in_socket.recv(BUFFERSIZE)
+		if respcmdstr.endswith(RESPONESTRING,0,1):
+			break
+
