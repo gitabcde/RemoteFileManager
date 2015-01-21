@@ -10,8 +10,8 @@ def DebugOutput(msg):
 	if __debug__:
 		print(msg)
 
-def GetFileFromSocket(in_socket,recv_filename):
-	fdfile=io.open(recv_filename,'ab')
+def GetFileFromSocket(in_socket,params):
+	fdfile=io.open(params[1],'ab')
 	infomsg=WaitExtInfoMsg(in_socket)
 	length=int(infomsg)
 	SendResponeMsg(in_socket)
@@ -23,8 +23,8 @@ def GetFileFromSocket(in_socket,recv_filename):
 		fdfile.write(filebuffer)
 	fdfile.close()
 
-def SendFileToSocket(in_socket,send_filename):
-	fdfile=io.open(send_filename,'rb')
+def SendFileToSocket(in_socket,params):
+	fdfile=io.open(params[0],'rb')
 	fdfile.seek(0,io.SEEK_END)
 	length=fdfile.tell()
 	fdfile.seek(0,io.SEEK_SET)

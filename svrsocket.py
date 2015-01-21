@@ -16,12 +16,12 @@ def svrthreadfun(retsocket,kargs):
 			rfmutil.DebugOutput('command type:get')
 			rfmutil.SendResponeMsg(retsocket)
 			rfmutil.DebugOutput('send get responecommand')
-			rfmutil.SendFileToSocket(retsocket,cmdstr.split(' ')[1])
+			rfmutil.SendFileToSocket(retsocket,cmdstr.split(' ')[1:])
 		if(cmdstr.endswith('put',0,3)):
 			rfmutil.DebugOutput('command type:put')
 			rfmutil.SendResponeMsg(retsocket)
 			rfmutil.DebugOutput('send put responecommand')
-			rfmutil.GetFileFromSocket(retsocket,cmdstr.split(' ')[1]+'get')
+			rfmutil.GetFileFromSocket(retsocket,cmdstr.split(' ')[1:])
 	retsocket[0].close()
 	thread.exit_thread()
 
