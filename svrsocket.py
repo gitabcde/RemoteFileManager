@@ -8,18 +8,18 @@ import thread
 def svrthreadfun(retsocket,kargs):
 	print(kargs)
 	while(True):
-		cmdstr=rfmutil.WaitCommand(retsocket)
+		cmdstr=rfmutil.WaitCommandMsg(retsocket)
 		if(cmdstr.endswith('quit',0,4)):
 			break
 		rfmutil.DebugOutput(cmdstr)
 		if(cmdstr.endswith('get',0,3)):
 			rfmutil.DebugOutput('command type:get')
-			rfmutil.SendResponeCommand(retsocket)
+			rfmutil.SendResponeMsg(retsocket)
 			rfmutil.DebugOutput('send get responecommand')
 			rfmutil.SendFileToSocket(retsocket,cmdstr.split(' ')[1])
 		if(cmdstr.endswith('put',0,3)):
 			rfmutil.DebugOutput('command type:put')
-			rfmutil.SendResponeCommand(retsocket)
+			rfmutil.SendResponeMsg(retsocket)
 			rfmutil.DebugOutput('send put responecommand')
 			rfmutil.GetFileFromSocket(retsocket,cmdstr.split(' ')[1]+'get')
 	retsocket[0].close()
